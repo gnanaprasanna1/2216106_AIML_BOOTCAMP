@@ -3,7 +3,8 @@ import pickle
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-df=pd.read_csv("SUV_Purchase.csv")
+
+df=pd.read_csv("outbreak_detect.csv")
 app = Flask(__name__)
 
 #Deserialize
@@ -19,15 +20,15 @@ def predict():
     print(features)
     final = [np.array(features)]
     #our model was trained on Normalized(scaled) data
-    X = df.iloc[:, 2:4].values
+    X = df.iloc[:,:4].values
     sst=StandardScaler().fit(X)
     output = model.predict(sst.transform(final))
     print(output)
 
-    if output[0]==0:
-        return render_template('index.html',pred=f'The Person will not be able to purchase SUV car')
+    if output[0] == 1:
+        return render_template('index.html',pred=f'The person will not get malaria')
     else:
-        return render_template('index.html',pred=f'The Person will be able to purchase SUV car')
+        return render_template('index.html',pred=f'The Person will get malaria')
 
 
 
